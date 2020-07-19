@@ -8,4 +8,4 @@ Musicorum Scheme is a standard used by the Generation Engines(such as [chloe](ht
 
 ### Versions
 
-- [1.0 (latest)](versions/1.0.md)
+- [1.0 (latest)](versions/1.0)
