@@ -28,7 +28,7 @@ The Musicorum Scheme 1.0 defines the request rules for a standard communication.
 The lookup connection corresponds as the first connection from the gateway to the worker nodes to define the availability of the nodes and their available themes.
 
 For each node, the gateway must make the following request and response:
-`GET http://worker.node/worker`
+`GET https://worker.node/worker`
 
 ```js
 {
@@ -77,7 +77,7 @@ This request takes a list of artist names and returns a `ArtistResponse` or `nul
 
 **Request:**
 ```js
-POST http://resource.manager/fetch/artists
+POST https://resource.manager/fetch/artists
 
 {
   "artists": String[]
@@ -87,7 +87,7 @@ POST http://resource.manager/fetch/artists
   <summary>Example</summary>
 
   ```json
-  POST http://resource.manager/fetch/artists
+  POST https://resource.manager/fetch/artists
   Content-Type: application/json; charset=UTF-8
 
   {
@@ -166,7 +166,7 @@ This represents the endpoint responsible to handle the image generation. It need
 **Request:**
 
 ```js
-POST http://gateway.node/generate
+POST https://gateway.node/generate
 
 {
   "user": String,
@@ -206,7 +206,7 @@ If error:
 <details>
   <summary>Example</summary>
 
-  
+
   If success:
   ```js
   Content-Type: application/json; charset=UTF-8
