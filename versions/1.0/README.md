@@ -12,8 +12,7 @@ The Musicorum Scheme 1.0 defines the request rules for a standard communication.
 1. [Workers](#workers)
     1. [Lookup](#lookup)
     2. [Generate](#generate)
-2. [Resource Manager](#resource-manager)
-    1. [Fetch Spotify Artists](#spotify-artists)
+2. [Content Manager](#content-manager)
 3. [Gateway](#gateway)
     1. [Authorization](#gateway-auth)
     2. [Generate](#gateway-generate)
@@ -21,22 +20,25 @@ The Musicorum Scheme 1.0 defines the request rules for a standard communication.
     4. [Status](#gateway-status)
 
 
-<h2 align="center" id="workers">Workers</h2>
+<h1 align="center" id="workers">Workers</h2>
 
-<h3 id="lookup">Lookup</h3>
+<h2 id="lookup">Lookup</h3>
 
 The lookup connection corresponds as the first connection from the gateway to the worker nodes to define the availability of the nodes and their available themes.
 
 For each node, the gateway must make the following request and response:
-`GET https://worker.node/worker`
+
+*Note: workers are recommended to be local and not public to the worls.*
+
+`GET https://worker.musicorumapp.com/worker`
 
 ```js
 {
-  "name": String,
-  "engine": String,
-  "version": Float,
-  "scheme": Float,
-  "themes": String[]
+  "name": String, // Name of this particular worker
+  "engine": String, // The generation engine used by this worker
+  "version": Float, // The current version of the engine
+  "scheme": Float, // The scheme version used
+  "themes": String[] // An array of available themes
 }
 ```
 
@@ -63,95 +65,77 @@ For each node, the gateway must make the following request and response:
 <br />
 With the response, the gateway should map all the themes with their available workers.
 
-<h3 id="generate">Generate</h3>
 
-> WIP
+<h2 id="generate">Generate</h3>
 
+`POST https://worker.musicorumapp.com/generate`
 
-<h2 align="center" id="resource-manager">Resource Manager</h2>
-
-This section represents the [Resource Manager](https://github.com/musicorum-app/resource-manager), a micro service managed to cross-match and fetch infromation from external sources (such as Spotify or Deezer), in order to get data that Last.fm API does not provide or it would consume too many requests. This may be applicable for fetching artist images, [audio features](https://developer.spotify.com/documentation/web-api/reference/tracks/get-several-audio-features/), or anything else.
-<h3 id="spotify-artists">Fetch Artists</h3>
-
-This request takes a list of artist names and returns a `ArtistResponse` or `null`.
-
-**Request:**
 ```js
-POST https://resource.manager/fetch/artists
-
 {
-  "artists": String[]
+  "id": String,
+  "user": {
+    "username": String,
+    "name": String,
+    "scrobbles": Integer
+  },
+  "theme": String,
+  "story": Boolean,
+  "hide_username": Boolean,
+  "data": ThemeData
 }
 ```
+
 <details>
   <summary>Example</summary>
 
-  ```json
-  POST https://resource.manager/fetch/artists
+  ```js
+  POST https://worker.musicorumapp.com/generate
   Content-Type: application/json; charset=UTF-8
 
   {
-    "artists": [
-      "Kali uchis",
-      "Lady gaga",
-      "Frank Ocean",
-      "An artist name that hopefully does not exist"
-    ]
+    "id": "UMKp4hQJTVaEet2pWaHwUqGtBHKSogAyCdCvjqayTH94xj",
+    "user": {
+      "username": "metye",
+      "name": "matheus",
+      "scrobbles": 22193
+    },
+    "theme": "grid",
+    "story": false,
+    "hide_username": false,
+    "data": {
+      "tiles": [
+        {
+          "image": "https://i.scdn.co/image/ab67616d0000b2736040effba89b9b00a6f6743a",
+          "name": "Replay",
+          "sub": "Lady Gaga"
+        },
+        {
+          "image": "https://i.scdn.co/image/ab67616d0000b2733899712512f50a8d9e01e951",
+          "name": "Play Date",
+          "sub": "Melanie Martinez"
+        },
+        ...
+      ]
+    }
   }
 ```
-</details>
-<br />
+Response will be an image
 
-
-**Response:**
-```js
-[
-  {
-    "name": String,
-    "hash": String,
-    "url": String,
-    "spotify": String
-  } | null
-]
-```
-
-<details>
-  <summary>Example</summary>
-
-  ```json
-  Content-Type: application/json; charset=UTF-8
-
-  [
-    {
-        "name": "Kali Uchis",
-        "hash": "63f68448a640d2691b311e80dfd67891f46550dc",
-        "url": "https://i.scdn.co/image/1617d6c0e35dffb12eeec77815d61af71f865ad9",
-        "spotify": "1U1el3k54VvEUzo3ybLPlM"
-    },
-    {
-        "name": "Lady Gaga",
-        "hash": "8383761a48b26a08cc5f31207940640720bfca90",
-        "url": "https://i.scdn.co/image/22e5bd06cd56f4bc430e0d4eb95af75565fdffa8",
-        "spotify": "1HY2Jd0NmPuamShAr6KMms"
-    },
-    {
-        "name": "Frank Ocean",
-        "hash": "4e90768c3b23d1168429a1635995f41be44cb37f",
-        "url": "https://i.scdn.co/image/0cc22250c0b18183e5c62f240a5756ec5226dee1",
-        "spotify": "2h93pZq0e7k5yf4dywlkpM"
-    },
-    null
-]
-
-  Response code: 200 (OK); Time: 534ms; Content length: 669 bytes
-```
 </details>
 
-<h2 align="center" id="gateway">Gateway</h2>
+
+<h1 align="center" id="content-manager">Content Manager</h2>
+
+This section represents the [Content Manager](https://github.com/musicorum-app/content-manager), a micro service managed to cross-match and fetch infromation from external sources (such as Spotify or Deezer) using cache, in order to get data that Last.fm API does not provide or it would consume too many requests. This may be applicable for fetching artist images, [audio features](https://developer.spotify.com/documentation/web-api/reference/tracks/get-several-audio-features/), or anything else.
+
+
+> This service is currently without documentation in order of future changes
+
+<h1 align="center" id="gateway">Gateway</h2>
 
 The gateway service is the proxy that redirects, queue, organize and controls all the other services. The service is also open to the public internet
 
-<h3 id="gateway-auth">Authorization</h3>
+<h2 id="gateway-auth">Authorization</h3>
 
 Every request made to the Gateway needs to be authenticated and must have this header:
 
@@ -159,20 +143,22 @@ Every request made to the Gateway needs to be authenticated and must have this h
 Authorization: <API KEY>
 ```
 
-<h3 id="gateway-generate">Generate</h3>
+<h2 id="gateway-generate">Generate</h3>
 
-This represents the endpoint responsible to handle the image generation. It needs a Last.fm user(represented by `user`), a valid [theme](themes/)(represented by `theme`), a story option, and the `ThemeOptions`(represented by `options`), which is relative to the choosen theme, defined [here](themes/).
+This represents the endpoint responsible to handle the image generation. It needs a Last.fm user(represented by `user`), a valid [theme](themes/)(represented by `theme`), a story option, and the `ThemeOptions`(represented by `options`), which is relative to the choosen theme, defined [here](themes/). There's also a `hide_username` boolean, that hides the username on the image if true.
 
 **Request:**
 
 ```js
-POST https://gateway.node/generate
+POST https://generator.musicorumapp.com/generate
 
 {
   "user": String,
   "theme" String,
   "story": Boolean,
-  "options": ThemeOptions
+  "options": ThemeOptions,
+  "language": String,
+  "hide_username": Boolean
 }
 ```
 
@@ -221,7 +207,7 @@ If error:
       "version": 1.0,
       "scheme": 1.0,
     },
-    "result": "https://result.musicorumapp.com/j3QTU7DAvrrmE2SX9d3uBbnxfr7nuOprZPf3vdDjsJSNfK.jpg",
+    "result": "https://cdn-2.musicorumapp.com/g/j3QTU7DAvrrmE2SX9d3uBbnxfr7nuOprZPf3vdDjsJSNfK.jpg",
     "duration": 1827,
   }
 
@@ -241,10 +227,10 @@ If error:
   ```
 </details>
 
-<h3 id="gateway-workers">Workers</h3>
+<h2 id="gateway-workers">Workers</h3>
 
 > WIP
 
-<h3 id="gateway-status">Status</h3>
+<h2 id="gateway-status">Status</h3>
 
 > WIP
