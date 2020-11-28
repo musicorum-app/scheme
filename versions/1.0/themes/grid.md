@@ -1,6 +1,37 @@
 # Grid theme
 
-## Data
+## Definitions
+
+```ts
+GridTile {
+  "image": String,
+  "name": String,
+  "secondary": String?
+}
+
+Quality [
+  LOW,
+  MEDIUM,
+  HIGH
+]
+
+GridStyle [
+  DEFAULT,
+  CAPTION,
+  SHADOW
+]
+
+Period [
+  7DAYS,
+  1MONTH,
+  3MONTHS,
+  6MONTHS,
+  1YEAR,
+  OVERALL
+]
+```
+
+## Worker data
 
 ```ts
 GridThemePayload {
@@ -9,20 +40,24 @@ GridThemePayload {
   "columns": Number, // between 3 - 20
   "show_names": Boolean,
   "show_playcount": Boolean,
+  "quality": Enum(Quality),
   "style": Enum(GridStyle)
 }
+```
 
-GridTile {
-  "image": String,
-  "name": String,
-  "secondary": String?
+## Generator data
+
+```ts
+GridThemePayload {
+  "tiles": GridTile[]
+  "rows": Number, // between 3 - 20
+  "columns": Number, // between 3 - 20
+  "show_names": Boolean,
+  "show_playcount": Boolean,
+  "quality": Enum(Quality),
+  "period": Number[] | Enum(Period) // If array of number, they represent a period of two timestamps
+  "style": Enum(GridStyle)
 }
-
-GridStyle [
-  DEFAULT,
-  CAPTION,
-  SHADOW
-]
 ```
 
 
