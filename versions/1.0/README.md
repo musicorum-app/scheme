@@ -30,7 +30,7 @@ For each node, the gateway must make the following request and response:
 
 *Note: workers are recommended to be local and not public to the worls.*
 
-`GET https://worker.musicorumapp.com/worker`
+`GET https://worker.musicorumapp.com/metadata`
 
 ```js
 {
