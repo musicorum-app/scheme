@@ -68,6 +68,8 @@ With the response, the gateway should map all the themes with their available wo
 
 <h2 id="generate">Generate</h3>
 
+**Request**
+
 `POST https://worker.musicorumapp.com/generate`
 
 ```js
@@ -84,6 +86,16 @@ With the response, the gateway should map all the themes with their available wo
   "data": ThemeData
 }
 ```
+
+**Response:**
+
+```js
+{
+  "file": String,
+  "duration": Number
+}
+```
+
 
 <details>
   <summary>Example</summary>
@@ -118,8 +130,14 @@ With the response, the gateway should map all the themes with their available wo
       ]
     }
   }
+  
+  >>>
+  
+  {
+    "file": "UMKp4hQJTVaEet2pWaHwUqGtBHKSogAyCdCvjqayTH94xj.webp",
+    "duration": 2.586826895
+  }
 ```
-Response will be an image
 
 </details>
 
