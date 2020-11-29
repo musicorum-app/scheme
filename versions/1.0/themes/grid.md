@@ -6,14 +6,9 @@
 GridTile {
   "image": String,
   "name": String,
-  "secondary": String?
+  "secondary": String?,
+  "scrobbles": Number
 }
-
-Quality [
-  LOW,
-  MEDIUM,
-  HIGH
-]
 
 GridStyle [
   DEFAULT,
@@ -40,7 +35,6 @@ GridThemePayload {
   "columns": Number, // between 3 - 20
   "show_names": Boolean,
   "show_playcount": Boolean,
-  "quality": Enum(Quality),
   "style": Enum(GridStyle)
 }
 ```
@@ -54,7 +48,6 @@ GridThemePayload {
   "columns": Number, // between 3 - 20
   "show_names": Boolean,
   "show_playcount": Boolean,
-  "quality": Enum(Quality),
   "period": Number[] | Enum(Period) // If array of number, they represent a period of two timestamps
   "style": Enum(GridStyle)
 }
