@@ -35,7 +35,8 @@ GridThemePayload {
   "columns": Number, // between 3 - 20
   "show_names": Boolean,
   "show_playcount": Boolean,
-  "style": Enum(GridStyle)
+  "style": Enum(GridStyle),
+  "tile_size": Number
 }
 ```
 
