@@ -44,7 +44,6 @@ GridThemePayload {
 
 ```ts
 GridThemePayload {
-  "tiles": GridTile[]
   "rows": Number, // between 3 - 20
   "columns": Number, // between 3 - 20
   "show_names": Boolean,
