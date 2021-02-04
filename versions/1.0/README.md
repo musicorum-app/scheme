@@ -28,7 +28,7 @@ The lookup connection corresponds as the first connection from the gateway to th
 
 For each node, the gateway must make the following request and response:
 
-*Note: workers are recommended to be local and not public to the worls.*
+*Note: workers are recommended to be local and not public to the world.*
 
 `GET https://worker.musicorumapp.com/metadata`
 
@@ -67,7 +67,9 @@ With the response, the gateway should map all the themes with their available wo
 
 
 <h2 id="generate">Generate</h3>
+This is the method that the `gateway` will use to generate the image. The gateway must send all the data, as `ThemeData`, used to render the image, like texts, images, and everything done, without the worker needing to make other requests. After the generation, the worker must save the image on the export path, shared with all the other services.
 
+> Note: Some themes does not require the user data, so it may return null for these cases. `hide_username` may also not be usable, but it's better to end `false` instead of `null`.
 **Request**
 
 `POST https://worker.musicorumapp.com/generate`
@@ -75,10 +77,11 @@ With the response, the gateway should map all the themes with their available wo
 ```js
 {
   "id": String,
-  "user": {
+  "user": null | {
     "username": String,
     "name": String,
-    "scrobbles": Integer
+    "scrobbles": Integer,
+    "image": String
   },
   "theme": String,
   "story": Boolean,
@@ -109,7 +112,8 @@ With the response, the gateway should map all the themes with their available wo
     "user": {
       "username": "metye",
       "name": "matheus",
-      "scrobbles": 22193
+      "scrobbles": 22193,
+      "image": "https://i.scdn.co/image/ed0552e9746ed2bbf04ae4bcb5525700ca31522d""
     },
     "theme": "grid",
     "story": false,
@@ -119,12 +123,12 @@ With the response, the gateway should map all the themes with their available wo
         {
           "image": "https://i.scdn.co/image/ab67616d0000b2736040effba89b9b00a6f6743a",
           "name": "Replay",
-          "sub": "Lady Gaga"
+          "secondary": "Lady Gaga"
         },
         {
           "image": "https://i.scdn.co/image/ab67616d0000b2733899712512f50a8d9e01e951",
           "name": "Play Date",
-          "sub": "Melanie Martinez"
+          "secondary": "Melanie Martinez"
         },
         ...
       ]
@@ -186,7 +190,6 @@ If success:
 ```js
 {
   "success": true,
-  "hash": String,
   "id": String,
   "worker": {
     "name": String,
@@ -195,7 +198,8 @@ If success:
     "scheme": Float,
   },
   "result": String
-  "duration": Integer,
+  "total_duration": Float,
+  "generation_duration": Float
 }
 ```
 If error:
@@ -217,16 +221,16 @@ If error:
 
   {
     "success": true,
-    "hash": "9b17780f9fa65fe2e886c72dbf91c62588e6324a8076b320378c164d79c3753e",
-    "id": "j3QTU7DAvrrmE2SX9d3uBbnxfr7nuOprZPf3vdDjsJSNfK",
+    "id": "gOOLkrHAROqPUgDCCBUPq-AWRnN1cBw5Y0v3qriQ29Rf0w",
     "worker": {
       "name": "rachel",
       "engine": "chloe",
       "version": 1.0,
       "scheme": 1.0,
     },
-    "result": "https://cdn-2.musicorumapp.com/g/j3QTU7DAvrrmE2SX9d3uBbnxfr7nuOprZPf3vdDjsJSNfK.jpg",
-    "duration": 1827,
+    "result": "https://result.musicorumapp.com/gOOLkrHAROqPUgDCCBUPq-AWRnN1cBw5Y0v3qriQ29Rf0w.webp",
+    "total_duration": 2.98003462,
+    "generation_duration": 2.472550765
   }
 
   Response code: 200 (OK); Time: 1936ms; Content length: 748 bytes
